@@ -1,4 +1,3 @@
-````markdown
 # Gestión de Tareas - Aplicación y Pruebas Automatizadas
 
 Este proyecto es una aplicación web sencilla para gestionar tareas personales, que permite agregar, editar, marcar como completadas y eliminar tareas. La aplicación está desarrollada con HTML, CSS y JavaScript, y cuenta con pruebas automatizadas creadas en Python con Selenium.
