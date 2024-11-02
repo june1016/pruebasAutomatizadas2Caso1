@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestión de Tareas</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      h1,
+      h2 {
+        color: #333;
+      }
+      input,
+      button {
+        margin: 5px 0;
+        padding: 8px;
+        width: 100%;
+        max-width: 300px;
+      }
+      ul {
+        list-style-type: none;
+        padding: 0;
+      }
+      li {
+        background: #f9f9f9;
+        margin: 5px 0;
+        padding: 10px;
+        border: 1px solid #ddd;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      button {
+        margin-left: 5px;
+      }
+      .completed {
+        text-decoration: line-through;
+        color: gray;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Seguimiento de Tareas</h1>
+
+    <div id="add-task-section">
+      <h2>Agregar Tarea</h2>
+      <input type="text" id="task-name" placeholder="Nombre de la tarea" />
+      <input type="text" id="task-desc" placeholder="Descripción de la tarea" />
+      <input type="date" id="task-due-date" />
+      <button onclick="addTask()">Agregar tarea</button>
+      <p id="add-confirmation"></p>
+    </div>
+
+    <div id="task-list-section">
+      <h2>Lista de Tareas</h2>
+      <ul id="task-list">
+        <!-- Lista de tareas -->
+      </ul>
+    </div>
+
+    <script>
+      let tasks = [];
+
+      function addTask() {
+        let name = document.getElementById("task-name").value.trim();
+        let description = document.getElementById("task-desc").value.trim();
+        let dueDateInput = document.getElementById("task-due-date").value;
+        let dueDate = dueDateInput
+          ? new Date(dueDateInput).toLocaleDateString("en-CA")
+          : "";
+
+        if (name && description && dueDate) {
+          let task = {
+            name: name,
+            description: description,
+            dueDate: dueDate,
+            status: "Pendiente",
+          };
+          tasks.push(task);
+          displayTasks();
+
+          document.getElementById("add-confirmation").innerText =
+            "Tarea agregada con éxito.";
+
+          // Vaciar los campos
+          document.getElementById("task-name").value = "";
+          document.getElementById("task-desc").value = "";
+          document.getElementById("task-due-date").value = "";
+        } else {
+          document.getElementById("add-confirmation").innerText =
+            "Por favor, completa todos los campos.";
+        }
+      }
+
+      function markCompleted(index) {
+        tasks[index].status =
+          tasks[index].status === "Pendiente" ? "Completada" : "Pendiente";
+        displayTasks();
+      }
+
+      function deleteTask(index) {
+        if (confirm("¿Estás seguro de que deseas eliminar esta tarea?")) {
+          tasks.splice(index, 1);
+          displayTasks();
+          alert("Tarea eliminada con éxito.");
+        }
+      }
+
+      function displayTasks() {
+        let taskList = document.getElementById("task-list");
+        taskList.innerHTML = "";
+
+        tasks.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+
+        tasks.forEach((task, index) => {
+          let li = document.createElement("li");
+          li.className = task.status === "Completada" ? "completed" : "";
+          li.innerHTML = `
+                    <div>
+                        <strong>${task.name}</strong> - ${task.dueDate} - ${
+            task.status
+          }<br>
+                        <em>${task.description}</em>
+                    </div>
+                    <div>
+                        <button onclick="markCompleted(${index})">${
+            task.status === "Pendiente"
+              ? "Marcar Completada"
+              : "Marcar Pendiente"
+          }</button>
+                        <button onclick="deleteTask(${index})">Eliminar</button>
+                    </div>
+                `;
+          taskList.appendChild(li);
+        });
+      }
+
+      function editTask(index) {
+        let newName = prompt("Nuevo nombre de la tarea:", tasks[index].name);
+        if (newName === null) return;
+
+        let newDescription = prompt(
+          "Nueva descripción de la tarea:",
+          tasks[index].description
+        );
+        if (newDescription === null) return;
+
+        let newDueDateInput = prompt(
+          "Nueva fecha de vencimiento (YYYY-MM-DD):",
+          tasks[index].dueDate
+        );
+        let newDueDate = newDueDateInput
+          ? new Date(newDueDateInput).toLocaleDateString("en-CA")
+          : "";
+
+        if (newDueDate && new Date(newDueDate) < new Date()) {
+          alert("Fecha inválida: debe ser una fecha futura.");
+          return;
+        }
+
+        if (newName.trim() && newDescription.trim() && newDueDate) {
+          tasks[index].name = newName.trim();
+          tasks[index].description = newDescription.trim();
+          tasks[index].dueDate = newDueDate;
+          displayTasks();
+          alert("Tarea actualizada con éxito.");
+        } else {
+          alert("Por favor, completa todos los campos correctamente.");
+        }
+      }
+
+      window.onload = function () {
+        let storedTasks = localStorage.getItem("tasks");
+        if (storedTasks) {
+          tasks = JSON.parse(storedTasks);
+          displayTasks();
+        }
+      };
+
+      function saveTasks() {
+        localStorage.setItem("tasks", JSON.stringify(tasks));
+      }
+
+      window.onbeforeunload = function () {
+        saveTasks();
+      };
+    </script>
+  </body>
+</html>
