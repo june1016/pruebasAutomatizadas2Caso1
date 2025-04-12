@@ -29,17 +29,17 @@ try:
         {
             "name": "Tarea más próxima",
             "desc": "Descripción tarea 1",
-            "date": "2024-06-15"
+            "date": "15/06/2024"
         },
         {
             "name": "Tarea intermedia",
             "desc": "Descripción tarea 2",
-            "date": "2024-09-20"
+            "date": "20/09/2024"
         },
         {
             "name": "Tarea más lejana",
             "desc": "Descripción tarea 3",
-            "date": "2024-12-31"
+            "date": "31/12/2024"
         }
     ]
 
@@ -70,7 +70,7 @@ try:
         for test_task in test_tasks:
             if test_task["name"] in task_text:
                 task_dates.append({
-                    "date": datetime.strptime(test_task["date"], "%Y-%m-%d"),
+                    "date": datetime.strptime(test_task["date"], "%d/%m/%Y"),
                     "name": test_task["name"]
                 })
                 break

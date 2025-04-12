@@ -30,7 +30,7 @@ try:
 
     test_name = "Estudiar para el examen"
     test_desc = "Revisar todos los capítulos del libro"
-    test_date = "2024-12-01"
+    test_date = "01/12/2024"
 
     task_name.send_keys(test_name)
     task_desc.send_keys(test_desc)

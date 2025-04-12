@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+      <title>Gestión de Tareas</title>
+    </head>
+
+    <body>
+      <h1>Seguimiento de Tareas</h1>
+
+      <div id="add-task-section">
+        <h2>Agregar Tarea</h2>
+
+        <input type="text" id="task-name" placeholder="Nombre de la tarea" />
+
+        <input
+          type="text"
+          id="task-desc"
+          placeholder="Descripción de la tarea"
+        />
+
+        <input type="date" id="task-due-date" />
+
+        <button onclick="addTask()">Agregar tarea</button>
+
+        <p id="add-confirmation"></p>
+      </div>
+
+      <div id="task-list-section">
+        <h2>Lista de Tareas</h2>
+
+        <ul id="task-list">
+          <!-- Lista de tareas -->
+        </ul>
+      </div>
+
+      <script>
+        let tasks = [];
+
+        function addTask() {
+          let name = document.getElementById("task-name").value;
+
+          let description = document.getElementById("task-desc").value;
+
+          let dueDate = document.getElementById("task-due-date").value;
+
+          if (name && description && dueDate) {
+            let task = {
+              name: name,
+
+              description: description,
+
+              dueDate: dueDate,
+
+              status: "Pendiente",
+            };
+
+            tasks.push(task);
+
+            let li = document.createElement("li");
+
+            li.innerHTML = `${name} - ${dueDate}
+
+                    <button onclick="markCompleted(${
+                      tasks.length - 1
+                    })">Marcar Completada</button>
+
+                    <button onclick="deleteTask(${
+                      tasks.length - 1
+                    })">Eliminar</button>`;
+
+            document.getElementById("task-list").appendChild(li);
+
+            document.getElementById("add-confirmation").innerText =
+              "Tarea agregada con éxito.";
+          } else {
+            document.getElementById("add-confirmation").innerText =
+              "Por favor, completa todos los campos.";
+          }
+        }
+
+        function markCompleted(index) {
+          tasks[index].status = "Completada";
+
+          displayTasks();
+        }
+
+        function deleteTask(index) {
+          tasks.splice(index, 1);
+
+          displayTasks();
+        }
+
+        function displayTasks() {
+          let taskList = document.getElementById("task-list");
+
+          taskList.innerHTML = "";
+
+          tasks.forEach((task, index) => {
+            let li = document.createElement("li");
+
+            li.innerHTML = `${task.name} - ${task.dueDate} - ${task.status}
+
+                    <button onclick="markCompleted(${index})">Marcar Completada</button>
+
+                    <button onclick="deleteTask(${index})">Eliminar</button>`;
+
+            taskList.appendChild(li);
+          });
+        }
+
+        function editTask(index) {
+          let dueDate = prompt("Nueva fecha de vencimiento (dd/mm/aaaa):");
+
+          if (new Date(dueDate) < new Date()) {
+            alert("Fecha inválida: debe ser una fecha futura."); // Error: Permite fechas pasadas (Criterio 3, Historia 2)
+          } else {
+            tasks[index].dueDate = dueDate;
+
+            displayTasks();
+          }
+        }
+      </script>
+    </body>
+  </html>
+</html>

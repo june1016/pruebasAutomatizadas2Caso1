@@ -32,7 +32,7 @@ try:
     # Datos de la tarea
     test_name = "Comprar materiales de oficina"
     test_desc = "Comprar lápices, papel y otros materiales"
-    test_date = "2024-12-01"
+    test_date = "01/12/2024"
 
     # Agregar la tarea
     task_name.send_keys(test_name)

@@ -32,7 +32,7 @@ try:
     # Datos de la tarea inicial
     test_name = "Estudiar para el examen"
     test_desc = "Revisar todos los capítulos del libro"
-    initial_date = "2024-11-01"
+    initial_date = "01/11/2024"
 
     # Agregar la tarea inicial
     task_name.send_keys(test_name)

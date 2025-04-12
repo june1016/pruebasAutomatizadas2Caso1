@@ -49,7 +49,12 @@
       <h2>Agregar Tarea</h2>
       <input type="text" id="task-name" placeholder="Nombre de la tarea" />
       <input type="text" id="task-desc" placeholder="Descripción de la tarea" />
-      <input type="date" id="task-due-date" />
+      <input
+        type="date"
+        id="task-due-date"
+        pattern="\d{2}/\d{2}/\d{4}"
+        placeholder="dd/mm/aaaa"
+      />
       <button onclick="addTask()">Agregar tarea</button>
       <p id="add-confirmation"></p>
     </div>
@@ -68,9 +73,12 @@
         let name = document.getElementById("task-name").value.trim();
         let description = document.getElementById("task-desc").value.trim();
         let dueDateInput = document.getElementById("task-due-date").value;
-        let dueDate = dueDateInput
-          ? new Date(dueDateInput).toLocaleDateString("en-CA")
-          : "";
+        let dueDate = "";
+
+        if (dueDateInput) {
+          const [year, month, day] = dueDateInput.split("-");
+          dueDate = `${day}/${month}/${year}`;
+        }
 
         if (name && description && dueDate) {
           let task = {
